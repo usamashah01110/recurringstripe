@@ -13,14 +13,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/home', function () {
+    return view('index');
 });
 
 Route::get('/onetimepayment', function () {
     return view('donate');
 })->name('donate.onetime');
 
-Route::get('/recurringpayment', function () {
-    return view('recurringpayment');
-})->name('recurringpayment');

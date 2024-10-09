@@ -17,10 +17,3 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/onetimepayment', function () {
-    return view('donate');
-})->name('donate.onetime');
-
-Route::get('/recurringpayment', function () {
-    return view('recurringpayment');
-})->name('recurringpayment');

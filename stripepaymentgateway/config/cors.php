@@ -16,11 +16,12 @@ return [
     */
 
 
-      'paths' => ['api/*'],
-      'allowed_methods' => ['*'],
-      'allowed_origins' => ['http://127.0.0.1:8082'],
-      'allowed_headers' => ['*'],
-      'exposed_headers' => [],
-      'max_age' => 0,
-      'supports_credentials' => false,
+    'paths' => ['api/*', 'sanctum/csrf-cookie'],  // Define the paths where CORS is applied (adjust for your API)
+    'allowed_methods' => ['*'],                   // Allow all HTTP methods (GET, POST, etc.)
+    'allowed_origins' => ['http://127.0.0.1:8082'], // Allow requests from your frontend origin
+    'allowed_origins_patterns' => [],
+    'allowed_headers' => ['*'],                   // Allow all headers
+    'exposed_headers' => [],
+    'max_age' => 0,
+    'supports_credentials' => false,
 ];

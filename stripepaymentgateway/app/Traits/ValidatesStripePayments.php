@@ -12,7 +12,10 @@ trait ValidatesStripePayments
     public function validateOneTimeDonation($request)
     {
         $validator = Validator::make($request->all(), [
-            'amount' => 'required|numeric|min:1',
+            'fundraisername' => 'required',
+            'fundraiseremail' => 'required',
+            'fundraisercontact_number' => 'required',
+            'donation_amount' => 'required|numeric',
             'currency' => 'required|string|in:usd,eur,gbp',
             'payment_method' => 'required|string',
         ]);
