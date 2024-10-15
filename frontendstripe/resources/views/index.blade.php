@@ -14,6 +14,7 @@
 <div class="container mt-5">
     <div class="col-md-4 mt-5">
         <a href="{{ route('donate.onetime') }}" class="btn btn-primary">One Time Payment</a>
+        <a href="{{ route('donate.recurring') }}" class="btn btn-primary">Recurring Payment</a>
     </div>
 </div>
 

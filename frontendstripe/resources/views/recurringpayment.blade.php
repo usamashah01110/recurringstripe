@@ -36,7 +36,7 @@
                 </div>
 
                 <!-- Hidden Plan ID (Static Plan ID) -->
-                <input type="hidden" name="plan" value="price_1Q7htRBM5xKzBdxGJiyKv2MY">
+                <input type="hidden" name="plan" value="price_1Q9BJ4BM5xKzBdxGd5jWiWDa">
 
                 <div class="mb-3" id="card-element">
                     <!-- Stripe Elements will be inserted here -->
@@ -96,7 +96,9 @@
                         errorMessageDiv.textContent = data.error;
                         errorMessageDiv.classList.remove('d-none');
                     } else {
-                        alert(data.message);
+                        console.log('data',data);
+                        console.log('subscription',data.subscription);
+                        // alert(data.message);
                     }
                 })
                 .catch(() => {

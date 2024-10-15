@@ -33,10 +33,14 @@ trait ValidatesStripePayments
     public function validateRecurringDonation($request)
     {
         $validator = Validator::make($request->all(), [
+            'fundraisername' => 'required',
+            'fundraiseremail' => 'required',
+            'fundraisercontact_number' => 'required',
+            'donation_amount' => 'required|numeric',
             'currency' => 'required|string|in:usd,eur,gbp',
             'payment_method' => 'required|string',
+            'currency' => 'required|string|in:usd,eur,gbp',
             'plan' => 'required|string',
-            'email' => 'required|email',
         ]);
 
         if ($validator->fails()) {

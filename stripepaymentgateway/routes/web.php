@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\JazzcashPaymentController;
+use App\Http\Controllers\StripePaymentController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,3 +19,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+
+Route::get('/payment/initiate', [JazzcashPaymentController::class, 'initiatePayment'])->name('payment.initiate');
+Route::post('/payment/response', [JazzcashPaymentController::class, 'paymentResponse']);
+
+Route::get('/subscription/{id}', [StripePaymentController::class, 'retrieveSubscription']);

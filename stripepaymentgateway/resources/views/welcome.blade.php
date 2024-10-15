@@ -20,8 +20,9 @@
         <div class="row">
             <div class="col-md-4"></div>
             <div class="col-md-4 mt-5">
-                <a href="{{ route('donate.onetime') }}" class="btn btn-primary">ONE Time Payment</a>
-                <a href="{{ route('recurringpayment') }}" class="btn btn-primary">Recurring Payment</a>
+{{--                <a href="{{ route('donate.onetime') }}" class="btn btn-primary">ONE Time Payment</a>--}}
+{{--                <a href="{{ route('recurringpayment') }}" class="btn btn-primary">Recurring Payment</a>--}}
+                <a href="{{ route('payment.initiate') }}" class="btn btn-danger">Jazzcash Payment</a>
             </div>
             <div class="col-md-4"></div>
         </div>
