@@ -59,7 +59,7 @@ class RenewSubscriptionJob implements ShouldQueue
 
             $finalizedInvoice = $invoice->finalizeInvoice();
 
-            $mysubscription->next_payment_date = date('Y-m-d H:i:s', $updatedSubscription->current_period_end);
+            $mysubscription->last_processed_at = date('Y-m-d H:i:s', $updatedSubscription->current_period_end);
 
             $mysubscription->save();
 

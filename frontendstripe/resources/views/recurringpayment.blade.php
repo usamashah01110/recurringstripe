@@ -36,7 +36,7 @@
                 </div>
 
                 <!-- Hidden Plan ID (Static Plan ID) -->
-                <input type="hidden" name="plan" value="price_1Q9BJ4BM5xKzBdxGd5jWiWDa">
+                <input type="hidden" name="plan" value="price_1QAGguBM5xKzBdxG7bwkMujd">
 
                 <div class="mb-3" id="card-element">
                     <!-- Stripe Elements will be inserted here -->
