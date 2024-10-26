@@ -13,8 +13,7 @@ trait HandlesStripeCurrency
      */
     public function getStripeKeyForCurrency($currency)
     {
-        $currencies = config('currencies.currencies'); // Ensure your config file exists and has currency data
-
+        $currencies = config('currencies.currencies');
         if (array_key_exists($currency, $currencies)) {
             return $currencies[$currency]['stripe_key'];
         }

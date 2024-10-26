@@ -14,19 +14,42 @@ class StripePaymentController extends Controller
 {
     use ValidatesStripePayments, HandlesStripeCurrency;
 
+    public function createPaymentIntent(Request $request)
+    {
+        // Set your Stripe secret key
+        Stripe::setApiKey(env('STRIPE_SECRET'));
+
+        // Create a Payment Intent
+        $paymentIntent = PaymentIntent::create([
+            'amount' => $request->input('amount') * 100, // Amount in cents
+            'currency' => 'usd',
+            // Additional metadata can be added if needed
+        ]);
+
+        // Return the client secret
+        return response()->json([
+            'clientSecret' => $paymentIntent->client_secret,
+        ]);
+    }
+
     public function processOneTimeDonation(Request $request)
     {
+        // Log request data
+        Log::info('Processing one-time donation with request data:', $request->all());
+
         $validationResponse = $this->validateOneTimeDonation($request);
         if ($validationResponse) {
+            Log::warning('Validation failed:', ['validationResponse' => $validationResponse]);
             return $validationResponse;
         }
 
-        // Set Stripe API key
         $stripeSecretKey = $this->getStripeKeyForCurrency($request->currency);
+        Log::info('Using Stripe secret key for currency', ['currency' => $request->currency]);
+
         \Stripe\Stripe::setApiKey($stripeSecretKey);
 
-        // Calculate donation amount minus tips
         $amount = $request->donation_amount - $request->tipsgiven;
+        Log::info('Calculated amount for donation', ['amount' => $amount]);
 
         try {
             // Step 1: Create a customer in Stripe
@@ -35,6 +58,7 @@ class StripePaymentController extends Controller
                 'name' => $request->fundraisername,
                 'description' => 'Donor for one-time donation',
             ]);
+            Log::info('Customer created successfully', ['customer_id' => $customer->id]);
 
             $paymentIntent = \Stripe\PaymentIntent::create([
                 'amount' => $amount * 100,
@@ -46,57 +70,14 @@ class StripePaymentController extends Controller
                 'customer' => $customer->id,
                 'return_url' => 'https://your-website.com/return',
             ]);
+            Log::info('Payment intent created successfully', ['paymentIntent_id' => $paymentIntent->id]);
 
             return response()->json(['message' => 'Donation successful!'], 200);
         } catch (\Exception $e) {
+            Log::error('Error processing one-time donation', ['error' => $e->getMessage()]);
             return response()->json(['error' => $e->getMessage()], 400);
         }
     }
-
-
-//    public function processRecurringDonation(Request $request)
-//    {
-//        $validationResponse = $this->validateRecurringDonation($request);
-//        if ($validationResponse) {
-//            return $validationResponse;
-//        }
-//
-//        $stripeSecretKey = $this->getStripeKeyForCurrency($request->currency);
-//        \Stripe\Stripe::setApiKey($stripeSecretKey);
-//
-//        try {
-//            $customer = \Stripe\Customer::create(['email' => $request->email]);
-//            $paymentMethod = \Stripe\PaymentMethod::retrieve($request->payment_method);
-//            $paymentMethod->attach(['customer' => $customer->id]);
-//
-//            \Stripe\Customer::update($customer->id, [
-//                'invoice_settings' => ['default_payment_method' => $request->payment_method],
-//            ]);
-//
-//            $subscription = \Stripe\Subscription::create([
-//                'customer' => $customer->id,
-//                'items' => [['plan' => $request->plan]],
-//                'currency' => $request->currency,
-//                'description' => "Recurring Donation"
-//            ]);
-//
-//            $subscriptionData = new UserSubscription();
-//            $subscriptionData->user_id = '1';
-//            $subscriptionData->stripe_customer_id = $customer->id;
-//            $subscriptionData->subscription_id = $subscription->id;
-//            $subscriptionData->plan_id = $request->plan;
-//            $subscriptionData->amount = $subscription->plan->amount;
-//            $subscriptionData->currency = $subscription->currency;
-//            $subscriptionData->payment_method_Id = $request->payment_method;
-//            $subscriptionData->next_payment_date = date('Y-m-d H:i:s', $subscription->current_period_end);
-//            $subscriptionData->save();
-//
-//            return response()->json(['message' => 'Your Donation has made successfully!', 'subscription' => $subscription], 200);
-//        } catch (\Exception $e) {
-//            return response()->json(['error' => $e->getMessage()], 400);
-//        }
-//    }
-
 
     public function processRecurringDonation(Request $request)
     {
